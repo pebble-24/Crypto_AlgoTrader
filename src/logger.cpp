@@ -3,6 +3,7 @@
 #include <ctime>
 #include <sstream>
 #include <iomanip>
+#include <string_view>
 
 #include "logger.hpp"
 
@@ -14,47 +15,47 @@ AlgoTrader::Logger::Logger()
 	std::ostringstream oss;
 	oss << "log_" << std::put_time(t, "%Y-%m-%d_%H-%M-%S") << ".txt";
 
-	m_logOutput = std::ofstream(oss.str());
+	m_LogOutput = std::ofstream(oss.str());
 
-	if (!m_logOutput) {
+	if (!m_LogOutput) {
 		std::cerr << "Failed to open log file.\n";
 		return;
 	}
 
-	m_logOutput << std::format("{} Initialised Logger\n", getTime());
+	m_LogOutput << std::format("{} Initialised Logger\n", getTime());
 }
 
 AlgoTrader::Logger::~Logger()
 {
-	m_logOutput.close();
+	m_LogOutput.close();
 }
 
 void AlgoTrader::Logger::logTradeImpl(const AlgoTrader::Signal &signal,
-				      const std::string &symbol,
-				      const double &positionSize,
-				      const std::string &strategyName)
+				      std::string_view symbol,
+				      double positionSize,
+				      std::string_view strategyName)
 {
 	logInternal(std::format("{} {} {} {} ${:.4f}\n", getTime(),
 				strategyName, convertSignalToString(signal),
 				symbol, positionSize));
 }
 
-void AlgoTrader::Logger::logImpl(const std::string &message)
+void AlgoTrader::Logger::logImpl(std::string_view message)
 {
 	logInternal(std::format("{} {}\n", getTime(), message));
 }
 
-void AlgoTrader::Logger::logErrorImpl(const std::string &message)
+void AlgoTrader::Logger::logErrorImpl(std::string_view message)
 {
 	logInternal(std::format("{} ERROR: {}\n", getTime(), message));
 }
 
-void AlgoTrader::Logger::logInternal(const std::string &message)
+void AlgoTrader::Logger::logInternal(std::string_view message)
 {
-	std::lock_guard<std::mutex> lock(m_mutex);
-	if (m_logOutput) {
-		m_logOutput << message;
-		m_logOutput.flush();
+	std::lock_guard<std::mutex> lock(m_Mutex);
+	if (m_LogOutput) {
+		m_LogOutput << message;
+		m_LogOutput.flush();
 	}
 }
 

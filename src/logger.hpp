@@ -5,28 +5,27 @@
 #include <fstream>
 #include <mutex>
 
-
 #include "strategy.hpp"
+#include <string_view>
 
 namespace AlgoTrader
 {
 class Logger {
     public:
 	static void logTrade(const AlgoTrader::Signal &signal,
-			     const std::string &symbol,
-			     const double &positionSize,
-			     const std::string &strategyName)
+			     std::string_view symbol, double positionSize,
+			     std::string_view strategyName)
 	{
 		getInstance().logTradeImpl(signal, symbol, positionSize,
 					   strategyName);
 	}
 
-	static void log(const std::string &message)
+	static void log(std::string_view message)
 	{
 		getInstance().logImpl(message);
 	}
 
-	static void logError(const std::string &message)
+	static void logError(std::string_view message)
 	{
 		getInstance().logErrorImpl(message);
 	}
@@ -35,7 +34,6 @@ class Logger {
 	Logger();
 	~Logger();
 
-	/* Delete copy and move constructors */
 	Logger(const Logger &) = delete;
 	Logger &operator=(const Logger &) = delete;
 
@@ -49,20 +47,20 @@ class Logger {
 	}
 
 	void logTradeImpl(const AlgoTrader::Signal &signal,
-			  const std::string &symbol, const double &positionSize,
-			  const std::string &strategyName);
+			  std::string_view symbol, double positionSize,
+			  std::string_view strategyName);
 
-	void logImpl(const std::string &message);
-	void logErrorImpl(const std::string &message);
+	void logImpl(std::string_view message);
+	void logErrorImpl(std::string_view message);
 
-        void logInternal(const std::string &message);
+	void logInternal(std::string_view message);
 
 	std::string getTime();
 	std::string convertSignalToString(const AlgoTrader::Signal &signal);
 
     private:
-	std::ofstream m_logOutput;
-	mutable std::mutex m_mutex;
+	std::ofstream m_LogOutput;
+	mutable std::mutex m_Mutex;
 };
 }
 
