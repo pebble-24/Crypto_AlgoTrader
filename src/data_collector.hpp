@@ -1,17 +1,19 @@
 #ifndef ALGO_TRADER_DATA_COLLECTOR_HPP
 #define ALGO_TRADER_DATA_COLLECTOR_HPP
 
+#include <memory>
+
 #include "market_data.hpp"
-#include "secrets.hpp"
+#include "portfolio_state_provider.hpp"
 
 namespace AlgoTrader
 {
 class DataCollector {
     public:
-	DataCollector(const AlgoTrader::Secrets &secrets);
+	DataCollector(
+		std::shared_ptr<AlgoTrader::PortfolioStateProvider> provider);
 	~DataCollector();
 
-	/* Delete copy and move constructors */
 	DataCollector(const DataCollector &) = delete;
 	DataCollector &operator=(const DataCollector &) = delete;
 
@@ -21,7 +23,7 @@ class DataCollector {
 	AlgoTrader::MarketData fetch();
 
     private:
-	AlgoTrader::Secrets m_Secrets;
+	std::shared_ptr<AlgoTrader::PortfolioStateProvider> m_Provider;
 };
 }
 

@@ -9,6 +9,7 @@
 #include "execution_engine.hpp"
 #include "secrets.hpp"
 #include "logger.hpp"
+#include "portfolio_state_provider.hpp"
 
 #include "strategy_smacrossover.hpp"
 
@@ -18,13 +19,17 @@ int main(int argc, char **argv)
 				    "../secrets/alpaca_secret");
 
 	// Initialize modules
-	AlgoTrader::DataCollector collector(secrets);
+	std::shared_ptr<AlgoTrader::PortfolioStateProvider> provider =
+		std::make_shared<AlgoTrader::PortfolioStateProvider>(secrets);
+
+	AlgoTrader::DataCollector collector(provider);
+	AlgoTrader::ExecutionEngine execution(provider);
+	AlgoTrader::RiskManager riskManager(provider);
+
 	std::unique_ptr<AlgoTrader::Strategy> strategy =
 		std::make_unique<AlgoTrader::Strategy_SMACrossover>();
-	AlgoTrader::ExecutionEngine execution(secrets);
-	AlgoTrader::RiskManager riskManager;
-
-	AlgoTrader::Logger::log("Starting trading bot.");
+	
+                AlgoTrader::Logger::log("Starting trading bot.");
 
 	while (true) {
 		AlgoTrader::MarketData data = collector.fetch();

@@ -2,16 +2,18 @@
 #define ALGO_TRADER_RISK_MANAGER_HPP
 
 #include "market_data.hpp"
+#include "portfolio_state_provider.hpp"
 #include "strategy.hpp"
+#include <memory>
 
 namespace AlgoTrader
 {
 class RiskManager {
     public:
-	RiskManager();
+	RiskManager(
+		std::shared_ptr<AlgoTrader::PortfolioStateProvider> provider);
 	~RiskManager();
 
-	/* Delete copy and move constructors */
 	RiskManager(const RiskManager &) = delete;
 	RiskManager &operator=(const RiskManager &) = delete;
 
@@ -20,6 +22,9 @@ class RiskManager {
 
 	double calculate(const AlgoTrader::MarketData &data,
 			 const AlgoTrader::Signal &signal);
+
+    private:
+	std::shared_ptr<AlgoTrader::PortfolioStateProvider> m_Provider;
 };
 }
 

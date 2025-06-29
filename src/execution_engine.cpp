@@ -1,7 +1,8 @@
 #include "execution_engine.hpp"
 
-AlgoTrader::ExecutionEngine::ExecutionEngine(const AlgoTrader::Secrets &secrets)
-	: m_Secrets(secrets)
+AlgoTrader::ExecutionEngine::ExecutionEngine(
+	std::shared_ptr<AlgoTrader::PortfolioStateProvider> provider)
+	: m_Provider(provider)
 {
 }
 

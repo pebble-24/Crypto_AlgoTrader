@@ -1,13 +1,12 @@
 #include "data_collector.hpp"
 #include "logger.hpp"
 #include "market_data.hpp"
+#include "portfolio_state_provider.hpp"
 
-AlgoTrader::DataCollector::DataCollector(const AlgoTrader::Secrets &secrets)
-	: m_Secrets(secrets)
+AlgoTrader::DataCollector::DataCollector(std::shared_ptr<AlgoTrader::PortfolioStateProvider> provider)
+	: m_Provider(provider)
 {
-	Logger::log("Initialising Data Collector");
-
-	Logger::log("Initialised Data Collector");
+	Logger::log("");
 }
 
 AlgoTrader::DataCollector::~DataCollector()
