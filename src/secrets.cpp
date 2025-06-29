@@ -1,8 +1,8 @@
 #include <string>
 #include <fstream>
 
-#include "logger.hpp"
-#include "secrets.hpp"
+#include "../include/logger.hpp"
+#include "../include/secrets.hpp"
 
 AlgoTrader::Secrets::Secrets(const std::string &api_key_filename,
 			     const std::string &api_secret_filename)

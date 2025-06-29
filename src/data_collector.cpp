@@ -1,7 +1,7 @@
-#include "data_collector.hpp"
-#include "logger.hpp"
-#include "market_data.hpp"
-#include "portfolio_state_provider.hpp"
+#include "../include/data_collector.hpp"
+#include "../include/logger.hpp"
+#include "../include/market_data.hpp"
+#include "../include/interfaces/portfolio_state_provider.hpp"
 
 AlgoTrader::DataCollector::DataCollector(std::shared_ptr<AlgoTrader::PortfolioStateProvider> provider)
 	: m_Provider(provider)

@@ -1,4 +1,4 @@
-#include "risk_manager.hpp"
+#include "../include/risk_manager.hpp"
 
 AlgoTrader::RiskManager::RiskManager(
 	std::shared_ptr<AlgoTrader::PortfolioStateProvider> provider)
