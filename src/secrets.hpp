@@ -2,6 +2,7 @@
 #define ALGO_TRADER_SECRETS_HPP
 
 #include <string>
+#include <string_view>
 
 namespace AlgoTrader
 {
