@@ -1,13 +1,15 @@
 #ifndef ALGO_TRADER_TRADER_HPP
 #define ALGO_TRADER_TRADER_HPP
 
+#include <memory>
+
 #include "data_collector.hpp"
 #include "interfaces/execution_engine.hpp"
 #include "interfaces/portfolio_state_provider.hpp"
 #include "interfaces/strategy.hpp"
 #include "risk_manager.hpp"
 #include "secrets.hpp"
-#include <memory>
+
 
 namespace AlgoTrader
 {
