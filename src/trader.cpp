@@ -1,58 +1,63 @@
+#include <cstdlib>
+#include <iostream>
+#include <thread>
+#include <chrono>
+
+#include "../include/logger.hpp"
+
 #include "../include/trader.hpp"
 
-AlgoTrader::Trader::Trader(int argc, char **argv)
-{
-	AlgoTrader::Secrets secrets("../secrets/alpaca_key", "../secrets/alpaca_secret");
+#include "../include/strategies/strategy_smacrossover.hpp"
 
-	if (secrets.api_secret.empty() || secrets.api_key.empty()) {
-		return -1;
+#include "../include/alpaca/alpaca_provider.hpp"
+#include "../include/alpaca/alpaca_execution_engine.hpp"
+
+AlgoTrader::Trader::Trader(int argc, char **argv)
+	: m_Secrets("../secrets/alpaca_key", "../secrets/alpaca_secret")
+	, m_Provider(std::make_shared<AlgoTrader::Alpaca_Provider>(m_Secrets))
+	, m_Collector(m_Provider)
+	, m_ExecutionEngine(std::make_unique<AlgoTrader::Alpaca_ExecutionEngine>(m_Secrets))
+        , m_RiskManager(m_Provider)
+        , m_Strategy(std::make_unique<AlgoTrader::Strategy_SMACrossover>())
+{
+	if (m_Secrets.api_secret.empty() || m_Secrets.api_key.empty()) {
+                AlgoTrader::Logger::log("Failed to read secrets!");
+                std::cerr << "Failed to read secrets!" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
-	// Initialize modules
-	std::shared_ptr<AlgoTrader::PortfolioStateProvider> provider =
-		std::make_shared<AlgoTrader::Alpaca_Provider>(secrets);
-
-	AlgoTrader::DataCollector collector(provider);
-
-	std::unique_ptr<AlgoTrader::ExecutionEngine> execution =
-		std::make_unique<AlgoTrader::Alpaca_ExecutionEngine>(secrets);
-
-	AlgoTrader::RiskManager riskManager(provider);
-
-	std::unique_ptr<AlgoTrader::Strategy> strategy =
-		std::make_unique<AlgoTrader::Strategy_SMACrossover>();
-
-	AlgoTrader::Logger::log("Starting trading bot.");
+	AlgoTrader::Logger::log("Trading bot initialised");
 }
 
 AlgoTrader::Trader::~Trader()
 {
-
 }
 
 bool AlgoTrader::Trader::run()
 {
-        while (traderShouldRun()) {
-		provider->refreshAccountData();
+	AlgoTrader::Logger::log("Starting trading bot.");
 
-		AlgoTrader::MarketData data = collector.fetch();
+	while (traderShouldRun()) {
+		m_Provider->refreshAccountData();
 
-		AlgoTrader::Signal signal = strategy->evaluate(data);
+		AlgoTrader::MarketData data = m_Collector.fetch();
 
-		double positionSize = riskManager.calculate(data, signal);
+		AlgoTrader::Signal signal = m_Strategy->evaluate(data);
+
+		double positionSize = m_RiskManager.calculate(data, signal);
 
 		if (signal != AlgoTrader::Signal::HOLD && positionSize > 0.0) {
-			execution->placeOrder(signal, "AAPL", positionSize);
-			AlgoTrader::Logger::logTrade(signal, "TMP", positionSize, strategy->name());
+			m_ExecutionEngine->placeOrder(signal, "AAPL", positionSize);
+			AlgoTrader::Logger::logTrade(signal, "TMP", positionSize, m_Strategy->name());
 		}
 
 		std::this_thread::sleep_for(std::chrono::seconds(30));
 	}
 
-        return true;
+	return true;
 }
 
 bool AlgoTrader::Trader::traderShouldRun()
 {
-        return m_TraderShouldRun;
+	return m_TraderShouldRun;
 }
