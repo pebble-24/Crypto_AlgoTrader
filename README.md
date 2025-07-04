@@ -21,7 +21,7 @@ Make sure you have:
 
 #### Clone the repository
 ```bash
-git clone https://github.com/pebble-24/Crypto_AlgoTrader/
+git clone --recurse-submodules https://github.com/pebble-24/Crypto_AlgoTrader/
 cd Crypto_AlgoTrader
 ```
 

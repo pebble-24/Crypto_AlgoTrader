@@ -5,29 +5,8 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE Release)
 
-include(FetchContent)
-
-find_package(cpr QUIET)
-if (NOT cpr_FOUND)
-  message(STATUS "CPR not found, using FetchContent")
-  FetchContent_Declare(
-    cpr
-    GIT_REPOSITORY https://github.com/libcpr/cpr.git
-    GIT_TAG 1.10.4
-  )
-  FetchContent_MakeAvailable(cpr)
-endif()
-
-find_package(nlohmann_json QUIET)
-if (NOT nlohmann_json_FOUND)
-  message(STATUS "nlohmann_json not found, using FetchContent")
-  FetchContent_Declare(
-    nlohmann_json
-    GIT_REPOSITORY https://github.com/nlohmann/json.git
-    GIT_TAG v3.11.3
-  )
-  FetchContent_MakeAvailable(nlohmann_json)
-endif()
+add_subdirectory(external/cpr)
+add_subdirectory(external/json)
 
 set(SOURCES
   src/main.cpp
