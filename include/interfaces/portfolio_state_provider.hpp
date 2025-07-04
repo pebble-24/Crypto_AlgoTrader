@@ -3,13 +3,9 @@
 
 namespace AlgoTrader
 {
-struct Order {
-        
-};
-
 class PortfolioStateProvider {
     public:
-	virtual ~PortfolioStateProvider() = 0;
+	virtual ~PortfolioStateProvider() = default;
 
 	PortfolioStateProvider(const PortfolioStateProvider &) = delete;
 	PortfolioStateProvider &operator=(const PortfolioStateProvider &) = delete;
@@ -17,7 +13,10 @@ class PortfolioStateProvider {
 	PortfolioStateProvider(PortfolioStateProvider &&) = delete;
 	PortfolioStateProvider &operator=(PortfolioStateProvider &&) = delete;
 
-	virtual void refresh() = 0;
+	virtual void refreshAccountData() = 0;
+
+    protected:
+	PortfolioStateProvider() = default;
 };
 }
 

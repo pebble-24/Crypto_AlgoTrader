@@ -7,7 +7,7 @@ namespace AlgoTrader
 {
 class ExecutionEngine {
     public:
-	virtual ~ExecutionEngine();
+	virtual ~ExecutionEngine() = default;
 
 	ExecutionEngine(const ExecutionEngine &) = delete;
 	ExecutionEngine &operator=(const ExecutionEngine &) = delete;
@@ -15,9 +15,11 @@ class ExecutionEngine {
 	ExecutionEngine(ExecutionEngine &&) = delete;
 	ExecutionEngine &operator=(ExecutionEngine &&) = delete;
 
-	virtual bool placeOrder(const AlgoTrader::Signal &signal,
-				std::string_view symbol,
+	virtual bool placeOrder(const AlgoTrader::Signal &signal, std::string_view symbol,
 				double positionSize) = 0;
+
+    protected:
+	ExecutionEngine() = default;
 };
 }
 

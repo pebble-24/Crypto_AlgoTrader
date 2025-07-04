@@ -18,8 +18,17 @@ class Strategy {
     public:
 	virtual ~Strategy() = default;
 
+	Strategy(const Strategy &) = delete;
+	Strategy &operator=(const Strategy &) = delete;
+
+	Strategy(Strategy &&) = delete;
+	Strategy &operator=(Strategy &&) = delete;
+
 	virtual Signal evaluate(const AlgoTrader::MarketData &data) = 0;
 	virtual inline std::string name() = 0;
+
+    protected:
+	Strategy() = default;
 };
 }
 

@@ -32,6 +32,13 @@ endif()
 set(SOURCES
   src/main.cpp
   src/logger.cpp
+  src/trader.cpp
+  src/market_data.cpp
+  src/secrets.cpp
+  src/data_collector.cpp
+  src/risk_manager.cpp
+  src/brokers/alpaca.cpp
+  src/strategies/strategy_smacrossover.cpp
 )
 
 add_executable(algo_trader ${SOURCES})

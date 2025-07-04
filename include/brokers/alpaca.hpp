@@ -20,11 +20,15 @@ class Alpaca_ExecutionEngine : public ExecutionEngine {
 
 	bool placeOrder(const AlgoTrader::Signal &signal, std::string_view symbol,
 			double positionSize) override;
+
+    private:
+	const AlgoTrader::Secrets &m_Secrets;
 };
 
 class Alpaca_Provider : public PortfolioStateProvider {
     public:
 	Alpaca_Provider(const AlgoTrader::Secrets &secrets);
+	~Alpaca_Provider();
 
 	void refreshAccountData() override;
 
