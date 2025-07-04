@@ -5,7 +5,7 @@ project(common LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-// TODO Replace this with specific files
+# TODO Replace this with specific files
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
     src/*.cpp
 )

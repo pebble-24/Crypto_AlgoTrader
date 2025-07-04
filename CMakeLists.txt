@@ -12,9 +12,9 @@ add_subdirectory(external/googletest)
 add_subdirectory(lib)
 
 # Applications
-add_subdirectory(app/live-trader)
+# add_subdirectory(app/live-trader)
 add_subdirectory(app/paper-trader)
-add_subdirectory(app/cli-backtester)
+# add_subdirectory(app/cli-backtester)
 
 # Tests
 add_subdirectory(test)
