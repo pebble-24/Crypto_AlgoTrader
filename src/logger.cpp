@@ -1,3 +1,4 @@
+#include <chrono>
 #include <format>
 #include <iostream>
 #include <ctime>
@@ -61,11 +62,21 @@ void AlgoTrader::Logger::logInternal(std::string_view message)
 
 std::string AlgoTrader::Logger::getTime()
 {
-	std::time_t now = std::time(nullptr);
-	std::tm *t = std::localtime(&now);
+        // Get current time point from system clock
+        std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+
+        // Convert to time_t to get calendar time for formatting
+	std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+
+        // Convert to tm struct for local time
+	std::tm *t = std::localtime(&now_c);
+
+        // Get ms
+	auto ms = duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;   
 
 	std::ostringstream oss;
 	oss << std::put_time(t, "%Y-%m-%d_%H-%M-%S");
+	oss << '.' << std::setfill('0') << std::setw(3) << ms.count();
 	return oss.str();
 }
 

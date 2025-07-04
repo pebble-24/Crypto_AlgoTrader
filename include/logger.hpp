@@ -12,12 +12,10 @@ namespace AlgoTrader
 {
 class Logger {
     public:
-	static void logTrade(const AlgoTrader::Signal &signal,
-			     std::string_view symbol, double positionSize,
-			     std::string_view strategyName)
+	static void logTrade(const AlgoTrader::Signal &signal, std::string_view symbol,
+			     double positionSize, std::string_view strategyName)
 	{
-		getInstance().logTradeImpl(signal, symbol, positionSize,
-					   strategyName);
+		getInstance().logTradeImpl(signal, symbol, positionSize, strategyName);
 	}
 
 	static void log(std::string_view message)
@@ -46,9 +44,8 @@ class Logger {
 		return instance;
 	}
 
-	void logTradeImpl(const AlgoTrader::Signal &signal,
-			  std::string_view symbol, double positionSize,
-			  std::string_view strategyName);
+	void logTradeImpl(const AlgoTrader::Signal &signal, std::string_view symbol,
+			  double positionSize, std::string_view strategyName);
 
 	void logImpl(std::string_view message);
 	void logErrorImpl(std::string_view message);
